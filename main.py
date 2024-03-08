@@ -7,18 +7,37 @@ from torch.nn import functional as F
 from datasets import NgramDataset
 from models.n_gram import NGramModel
 from tokenizers.whitespace_tokenizer import WhitespaceTokenizer
+import argparse
 
-context_size = 16
-batch_size = 16
+parser = argparse.ArgumentParser(description='Train an N-gram model')
+parser.add_argument('--context_size', type=int, default=16,
+                    help='Size of the context (default: %(default)s)')
+parser.add_argument('--batch_size', type=int, default=16,
+                    help='Batch size (default: %(default)s)')
+parser.add_argument('--max_epochs', type=int, default=10,
+                    help='Maximum number of epochs to train (default: %(default)s)')
+parser.add_argument('--vocab_size', type=int, default=20000,
+                    help='Vocabulary size for tokenizer (default: %(default)s)')
+parser.add_argument('--n_gram', type=int, default=2,
+                    help='Size of the n-gram (default: %(default)s)')
+parser.add_argument('--save_model', action='store_true', default=True,
+                    help='Save the trained model (default: %(default)s)')
+parser.add_argument('--debug', action='store_true',
+                    help='Print debug information')
+args = parser.parse_args()
+
+context_size = args.context_size
+batch_size = args.batch_size
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
 print(f"Using device: {device}")
-debug_mode = True
-max_epochs = 10
-n_gram = 2
-save_model = True
-torch.manual_seed(313)
+debug_mode = args.debug
+max_epochs = args.max_epochs
+n_gram = args.n_gram
+save_model = args.save_model
+vocab_size = args.vocab_size
 
-tokenizer = WhitespaceTokenizer(vocab_size=20000)
+torch.manual_seed(313)
+tokenizer = WhitespaceTokenizer(vocab_size=vocab_size)
 
 def read_dataset(path) -> list[str]:
     with open(path) as f:
