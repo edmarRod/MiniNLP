@@ -11,7 +11,8 @@ from tokenizers.whitespace_tokenizer import WhitespaceTokenizer
 context_size = 16
 batch_size = 16
 device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-debug_mode = False
+print(f"Using device: {device}")
+debug_mode = True
 max_epochs = 10
 n_gram = 2
 save_model = True
