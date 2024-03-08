@@ -19,16 +19,16 @@ class WhitespaceTokenizer():
 
         tok_idx['<unk>'] = self.vocab_size-1
         idx_tok[self.vocab_size-1] = '<unk>'
-        
+
         self.tok_idx = tok_idx
         self.idx_tok = idx_tok
 
     def encode(self, string: str) -> list[int]:
         return [self.tok_idx.get(token, self.vocab_size-1) for token in string.split(' ')]
 
-    
-    def decode(self, tokens: list[int]) -> list[str]:
-        return [self.idx_tok.get(token, '<unk>') for token in tokens]
+
+    def decode(self, tokens: list[int]) -> str:
+        return ' '.join([self.idx_tok.get(int(token), '<unk>') for token in tokens])
 
 
 if __name__ == '__main__':
