@@ -16,6 +16,9 @@ class WhitespaceTokenizer():
             token, _ = token
             tok_idx[token] = i
             idx_tok[i] = token
+
+        tok_idx['<unk>'] = self.vocab_size-1
+        idx_tok[self.vocab_size-1] = '<unk>'
         
         self.tok_idx = tok_idx
         self.idx_tok = idx_tok
@@ -28,15 +31,16 @@ class WhitespaceTokenizer():
         return [self.idx_tok.get(token, '<unk>') for token in tokens]
 
 
-train_string = """This is a possible example training text"""
+if __name__ == '__main__':
+    train_string = """This is a possible example training text"""
 
-text = 'This is a possible text wow!'
+    text = 'This is a possible text wow!'
 
-tokenizer = WhitespaceTokenizer()
-tokenizer.create_vocab(train_string)
-encoded_text = tokenizer.encode(text)
-decoded_text = tokenizer.decode(encoded_text)
+    tokenizer = WhitespaceTokenizer()
+    tokenizer.create_vocab(train_string)
+    encoded_text = tokenizer.encode(text)
+    decoded_text = tokenizer.decode(encoded_text)
 
-print(f'Text: {text}')
-print(f'Encoded text: {encoded_text}')
-print(f'Decoded text: {decoded_text}')
+    print(f'Text: {text}')
+    print(f'Encoded text: {encoded_text}')
+    print(f'Decoded text: {decoded_text}')
