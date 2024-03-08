@@ -1,7 +1,6 @@
 import torch
 from torch import nn
 
-
 class MiniLLM(nn.Module):
     def __init__(self, vocab_size: int = 1024, embedding_dim: int = 256, context_size: int = 256, num_heads: int = 8, dim_feedforward:int = 1024) -> None:
         super().__init__()
