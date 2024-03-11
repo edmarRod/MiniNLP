@@ -161,4 +161,4 @@ cython_debug/
 
 #data directory
 data/
-model_checkpoints/
+model_checkpoints/*
