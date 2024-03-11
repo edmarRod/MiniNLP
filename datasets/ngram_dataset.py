@@ -1,6 +1,5 @@
 import torch
 from torch.utils.data import Dataset
-from tokenizers.whitespace_tokenizer import WhitespaceTokenizer
 
 class NgramDataset(Dataset):
   def __init__(self, data, n_gram: int):
@@ -21,6 +20,8 @@ class NgramDataset(Dataset):
     return torch.LongTensor(self.x_chunks[idx]), torch.tensor(self.y_chunks[idx], dtype=torch.long)
   
 if __name__ == '__main__':
+    from tokenizers.whitespace_tokenizer import WhitespaceTokenizer
+    
     sample_data = ["This is some sample text for testing.", "This is another sample text."]
     tokenizer = WhitespaceTokenizer()
     tokenizer.create_vocab(''.join(sample_data))
