@@ -60,7 +60,7 @@ if __name__ == '__main__':
     model.load_state_dict(torch.load('model_checkpoints/{model_name}.pt'))
     model.eval()
 
-    generated = model.generate(torch.tensor([tokenizer.encode('This is the best action')]).to(device), max_new_tokens)
+    generated = model.generate(torch.tensor([tokenizer.encode(x)]).to(device), max_new_tokens)
 
     print(f'Input: {x}')
     print(f'Generated: {tokenizer.decode(generated[0])}')

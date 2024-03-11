@@ -1,6 +1,6 @@
 # Language Models
 
-Repo with the code to train and use different language models.
+Repo with the code to train and use different language models using pytorch.
 
 ## Quick start
 
@@ -24,4 +24,4 @@ python main.py
 
 ## Models
 
-Currently implemented are N-gram, CBOW and a Decoder language models.
+Currently implemented models are N-gram, CBOW and Decoder-only language model.
