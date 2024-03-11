@@ -18,10 +18,21 @@ class NGramModel(nn.Module):
 
     return x
 
-  def generate(self, x, max_new_tokens:int):
-    for _ in range(max_new_tokens):
-      logits = self(x[:, -self.n_gram:])
-      probs = F.softmax(logits, dim=-1)
-      idx_next = torch.multinomial(probs, num_samples=1)
-      x = torch.cat((x, idx_next),dim=1)
-    return x
+  def generate(self, x, max_new_tokens:int, temperature:float = 1.0, top_k:int = None, top_p:float = None):
+      for _ in range(max_new_tokens):
+          logits = self(x[:, -self.context_size:])
+          logits = logits[:, -1, :] / temperature
+
+          if top_k is not None:
+              vals, _ = torch.topk(logits, 5)
+              logits[logits < torch.min(vals)] = float('-inf')
+
+          if top_p is not None:
+              val, idx = torch.sort(logits,descending=True)
+              logits[:, idx[torch.cumsum(F.softmax(val, dim=-1), dim=-1) >= top_p]] = float('-inf')
+          
+          probs = F.softmax(logits, dim=-1)
+
+          idx_next = torch.multinomial(probs, num_samples=1)
+          x = torch.cat((x, idx_next),dim=1)
+      return x
