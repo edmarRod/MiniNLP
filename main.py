@@ -119,7 +119,8 @@ if __name__ == '__main__':
         torch.save(model.state_dict(), f'model_checkpoints/{model_name}.pt')
         torch.save(tokenizer, f'model_checkpoints/{model_name}_tokenizer.pt')
 
-    x = 'This is the best action'
-    sentence = torch.tensor([tokenizer.encode(x)]).to(device)
-    y = model.generate(sentence, 10)
-    print(f"Prompt: {x}\nGenerated: {tokenizer.decode(y[0])}")
+    if model_name != 'cbow':
+        x = 'This is the best action'
+        sentence = torch.tensor([tokenizer.encode(x)]).to(device)
+        y = model.generate(sentence, 10)
+        print(f"Prompt: {x}\nGenerated: {tokenizer.decode(y[0])}")

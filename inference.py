@@ -50,7 +50,8 @@ if __name__ == '__main__':
     model.to(device)
     model.eval()
 
-    generated = model.generate(torch.tensor([tokenizer.encode(x)]).to(device), max_new_tokens)
+    if model_name != 'cbow': # cbow doesn't need to generate
+        generated = model.generate(torch.tensor([tokenizer.encode(x)]).to(device), max_new_tokens)
 
-    print(f'Input: {x}')
-    print(f'Generated: {tokenizer.decode(generated[0])}')
+        print(f'Input: {x}')
+        print(f'Generated: {tokenizer.decode(generated[0])}')
