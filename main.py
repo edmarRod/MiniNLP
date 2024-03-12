@@ -28,9 +28,9 @@ parser.add_argument('--embedding_dim', type=int, default=256, help='Embedding di
 parser.add_argument('--num_heads', type=int, default=8, help='Number of heads for attention (default: %(default)s)')
 parser.add_argument('--dim_feedforward', type=int, default=1024, help='Dimension of transformer feedforward (default: %(default)s)')
 parser.add_argument('--num_blocks', type=int, default=4, help='Number of decoder blocks (default: %(default)s)')
-parser.add_argument('--save_model', action='store_true', default=True,
+parser.add_argument('--save_model', type=bool, default=True,
                     help='Save the trained model (default: %(default)s)')
-parser.add_argument('--debug', action='store_true',
+parser.add_argument('--debug', type=bool, default=False,
                     help='Print debug information')
 args = parser.parse_args()
 
@@ -116,9 +116,10 @@ if __name__ == '__main__':
         print(f'Epoch {epoch}: Training loss: {train_loss / len(train_dataloader)}; Validation loss: {val_loss / len(val_dataloader)}')
 
     if save_model:
-        torch.save(model.state_dict(), 'model_checkpoints/{model_name}.pt')
-        torch.save(tokenizer, 'model_checkpoints/{model_name}_tokenizer.pt')
+        torch.save(model.state_dict(), f'model_checkpoints/{model_name}.pt')
+        torch.save(tokenizer, f'model_checkpoints/{model_name}_tokenizer.pt')
 
-    sentence = torch.tensor([tokenizer.encode('This is the best action')]).to(device)
+    x = 'This is the best action'
+    sentence = torch.tensor([tokenizer.encode(x)]).to(device)
     y = model.generate(sentence, 10)
-    print(f"Prompt: {sentence}\nGenerated: {tokenizer.decode(y[0])}")
+    print(f"Prompt: {x}\nGenerated: {tokenizer.decode(y[0])}")
