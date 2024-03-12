@@ -10,10 +10,6 @@ parser = argparse.ArgumentParser(description='Infer using a model')
 parser.add_argument('--model_name', type=str, default='ngram', help="Name of the model to train (default: %(default)s)")
 parser.add_argument('--context_size', type=int, default=16,
                     help='Size of the context (default: %(default)s)')
-parser.add_argument('--batch_size', type=int, default=16,
-                    help='Batch size (default: %(default)s)')
-parser.add_argument('--max_epochs', type=int, default=10,
-                    help='Maximum number of epochs to train (default: %(default)s)')
 parser.add_argument('--vocab_size', type=int, default=20000,
                     help='Vocabulary size for tokenizer (default: %(default)s)')
 parser.add_argument('--n_gram', type=int, default=2,
@@ -28,13 +24,9 @@ args = parser.parse_args()
 
 if __name__ == '__main__':
     context_size = args.context_size
-    batch_size = args.batch_size
     device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
     print(f"Using device: {device}")
-    debug_mode = args.debug
-    max_epochs = args.max_epochs
     n_gram = args.n_gram
-    save_model = args.save_model
     vocab_size = args.vocab_size
     model_name = args.model_name
     embedding_dim = args.embedding_dim
@@ -45,10 +37,7 @@ if __name__ == '__main__':
     x = args.x
     max_new_tokens=args.max_new_tokens
 
-    device = torch.device('cuda') if torch.cuda.is_available() else torch.device('cpu')
-    print(f"Using device: {device}")
-
-    tokenizer = torch.load('model_checkpoints/{model_name}_tokenizer.pt')
+    tokenizer = torch.load(f'model_checkpoints/{model_name}_tokenizer.pt')
 
     if model_name == 'ngram':
         model = NGramModel(n_gram=args.n_gram, vocab_size=tokenizer.vocab_size, embedding_dim=embedding_dim)
@@ -57,7 +46,8 @@ if __name__ == '__main__':
     elif model_name == 'mini_llm':
         model = MiniLLM(vocab_size=tokenizer.vocab_size, embedding_dim=embedding_dim, context_size = context_size, num_heads=num_heads, dim_feedforward=dim_feedforward, num_blocks=num_blocks)
 
-    model.load_state_dict(torch.load('model_checkpoints/{model_name}.pt'))
+    model.load_state_dict(torch.load(f'model_checkpoints/{model_name}.pt'))
+    model.to(device)
     model.eval()
 
     generated = model.generate(torch.tensor([tokenizer.encode(x)]).to(device), max_new_tokens)
