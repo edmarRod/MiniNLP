@@ -20,8 +20,8 @@ class NGramModel(nn.Module):
 
   def generate(self, x, max_new_tokens:int, temperature:float = 1.0, top_k:int = None, top_p:float = None):
       for _ in range(max_new_tokens):
-          logits = self(x[:, -self.context_size:])
-          logits = logits[:, -1, :] / temperature
+          logits = self(x[:, -self.n_gram:])
+          logits = logits / temperature
 
           if top_k is not None:
               vals, _ = torch.topk(logits, 5)
